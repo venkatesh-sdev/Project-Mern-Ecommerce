@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Amazon Products",
+        "price": 300,
+        "description": "To Sell and Recive the Products",
+        "ratings": 5,
+        "images": [
+            {
+                "image": "products_1232.jpg"
+            }
+        ],
+        "category": "Electronics",
+        "seller": "Venkatesh",
+        "stock": 12,
+        "numOfReviews": 23,
+        "reviews": []
+    },
+    {
+        "name": "FlipKart Products",
+        "price": 300,
+        "description": "To Sell and Recive the Products",
+        "ratings": 5,
+        "images": [
+            {
+                "image": "products_1232.jpg"
+            }
+        ],
+        "category": "Electronics",
+        "seller": "Karthick",
+        "stock": 12,
+        "numOfReviews": 23,
+        "reviews": []
+    },
+    {
+        "name": "Spoify Products",
+        "price": 300,
+        "description": "To Sell and Recive the Products",
+        "ratings": 5,
+        "images": [
+            {
+                "image": "products_1232.jpg"
+            }
+        ],
+        "category": "Electronics",
+        "seller": "Main",
+        "stock": 12,
+        "numOfReviews": 23,
+        "reviews": []
+    },
+    {
+        "name": "Best Products",
+        "price": 300,
+        "description": "To Sell and Recive the Products",
+        "ratings": 5,
+        "images": [
+            {
+                "image": "products_1232.jpg"
+            }
+        ],
+        "category": "Electronics",
+        "seller": "Main",
+        "stock": 12,
+        "numOfReviews": 23,
+        "reviews": []
+    },
+    {
+        "name": "User Products",
+        "price": 300,
+        "description": "To Sell and Recive the Products",
+        "ratings": 5,
+        "images": [
+            {
+                "image": "products_1232.jpg"
+            }
+        ],
+        "category": "Electronics",
+        "seller": "Super User",
+        "stock": 12,
+        "numOfReviews": 23,
+        "reviews": []
+    }
+]
