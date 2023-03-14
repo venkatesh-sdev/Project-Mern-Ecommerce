@@ -1,61 +1,47 @@
 const Product = require('../database/models/productModel');
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorHandler = require('../utils/ErrorHandler');
 
 // Getting All Products 
-exports.getProducts = asyncHandler(async (req, res) => {
+exports.getProducts = asyncHandler(async (req, res, next) => {
     const product = await Product.find();
-    if (!product) {
-        return res.status(404).json({
-            message: "Product Not Found"
-        })
-    }
-    res.status(200).json({ product });
+    res.status(200).json({ success: true, product });
 })
 //  Get Single Product
-exports.getSingleProduct = asyncHandler(async (req, res) => {
+exports.getSingleProduct = asyncHandler(async (req, res, next) => {
     const product = await Product.findById(req.params.id);
     if (!product) {
-        return res.status(404).json({
-            message: "Product Not Found"
-        })
+        next(new ErrorHandler("Product Not Found", 400))
     }
-    res.status(200).json({ product })
+    res.status(200).json({ success: true, product });
 })
 
 // Adding a Product 
-exports.addProducts = asyncHandler(async (req, res) => {
+exports.addProducts = asyncHandler(async (req, res, next) => {
     const product = await Product.create(req.body)
-    res.status(201).json({ product });
+    res.status(200).json({ success: true, product });
 })
 
 // Updating a Product
-exports.updateProducts = asyncHandler(async (req, res) => {
+exports.updateProducts = asyncHandler(async (req, res, next) => {
     const id = req.params.id;
     const body = req.body;
-    if (!id || !body) {
-        return res.status(400).json({
-            message: "Missing Data For Finding Product"
-        })
-    }
     let product = await Product.findById(id);
+    console.log(product)
     if (!product) {
-        res.status(404).json({
-            message: 'Product Not Found'
-        })
+        next(new ErrorHandler("Product Not Found", 400))
     }
     product = await Product.findByIdAndUpdate(id, body, { new: true, runValidators: true })
-    res.status(200).json({ product });
+    res.status(200).json({ success: true, product });
 })
 
 // Deleting The Product
-exports.deleteProducts = asyncHandler(async (req, res) => {
-    const id = req.params.id;
-    if (!id) {
-        return res.status(400).json({
-            message: "Missing Data For Finding Product"
-        })
+exports.deleteProducts = asyncHandler(async (req, res, next) => {
+    const product = await Product.findById(req.params.id)
+    if (!product) {
+        next(new ErrorHandler("Product Not Found", 400))
     }
-    const product = await Product.findByIdAndDelete(id)
-    res.status(200).json({ product });
+    await Product.findByIdAndDelete(id)
+    res.status(200).json({ success: true, message: "Product Deleted Successfully" });
 })
 

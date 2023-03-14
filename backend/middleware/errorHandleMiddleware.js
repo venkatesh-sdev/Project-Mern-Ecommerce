@@ -1,11 +1,36 @@
-const errorHandler = async (err, req, res, next) => {
-    const statusCode = res.statusCode ? res.statusCode : 500;
-    res.status(statusCode);
-    const errorMessage = Object.values(err.errors).map(error => error.name === 'ValidatorError' && error.message)
-    res.json({
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? errorMessage : err.stack,
-    })
-}
+module.exports = (err, req, res, next) => {
+    err.statusCode = err.statusCode || 500;
 
-module.exports = errorHandler;
+
+    if (process.env.NODE_ENV == 'development') {
+        res.status(err.statusCode).json({
+            success: false,
+            message: err.message,
+            stack: err.stack,
+            error: err
+        })
+    }
+
+    if (process.env.NODE_ENV == 'production') {
+        let message = err.message;
+        let error = new Error(message);
+
+
+        if (err.name == "ValidationError") {
+            message = Object.values(err.errors).map(value => value.message)
+            error = new Error(message)
+            err.statusCode = 400
+        }
+
+        if (err.name == 'CastError') {
+            message = `Resource not found: ${err.path}`;
+            error = new Error(message)
+            err.statusCode = 400
+        }
+
+        res.status(err.statusCode).json({
+            success: false,
+            message: error.message || 'Internal Server Error',
+        })
+    }
+}
