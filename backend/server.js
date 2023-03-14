@@ -18,6 +18,19 @@ app.use('/products', productRoutes);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log("Server Started At http://localhost:" + PORT)
+})
+
+process.on('unhandledRejection', (err) => {
+    console.log(`Error: ${err.message}`);
+    server.close(() => {
+        process.exit(1);
+    })
+})
+process.on('uncaughtException', (err) => {
+    console.log(`Error: ${err.message}`);
+    server.close(() => {
+        process.exit(1);
+    })
 })
