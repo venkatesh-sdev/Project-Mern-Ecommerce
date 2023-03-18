@@ -1,16 +1,16 @@
 const Product = require('../database/models/productModel');
 const asyncHandler = require('../middleware/asyncHandler');
 const ErrorHandler = require('../utils/ErrorHandler');
+const ApiService = require('../utils/ApiService')
 
 // Getting All Products 
 exports.getProducts = asyncHandler(async (req, res, next) => {
-    const product = await Product.find();
-    res.status(200).json({ success: true, product });
+    const product = await new ApiService(Product.find(),req.query).search().filter().paginate();
+    res.status(200).json({ success: true, product: await product.query });
 })
 //  Get Single Product
 exports.getSingleProduct = asyncHandler(async (req, res, next) => {
     const product = await Product.findById(req.params.id);
-
     if (!product) {
         return next(new ErrorHandler('Product not found', 400));
     }
@@ -34,7 +34,7 @@ exports.updateProducts = asyncHandler(async (req, res, next) => {
     let product = await Product.findById(id);
     console.log(product)
     if (!product) {
-         return next(new ErrorHandler("Product Not Found", 400))
+        return next(new ErrorHandler("Product Not Found", 400))
     }
     product = await Product.findByIdAndUpdate(id, body, { new: true, runValidators: true })
     res.status(200).json({ success: true, product });
@@ -44,7 +44,7 @@ exports.updateProducts = asyncHandler(async (req, res, next) => {
 exports.deleteProducts = asyncHandler(async (req, res, next) => {
     const product = await Product.findById(req.params.id)
     if (!product) {
-        return  next(new ErrorHandler("Product Not Found", 400))
+        return next(new ErrorHandler("Product Not Found", 400))
     }
     await Product.findByIdAndDelete(id)
     res.status(200).json({ success: true, message: "Product Deleted Successfully" });
